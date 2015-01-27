@@ -252,15 +252,28 @@ public class InboxLayout extends FrameLayout {
     private int PrevOffSetY = 0;
     private int dy;
     private int moveContent(int offsetY){
-        int scrollY;
+
         realOffsetY = (int)(offsetY/1.4f);
         scrollTo(0, realOffsetY);
         dy = PrevOffSetY - realOffsetY;
         PrevOffSetY = realOffsetY;
         mScrollView.scrollBy(0, -dy);
-        scrollY = mScrollView.getScrollY();
-        mScrollView.drawTopShadow(scrollY, -realOffsetY, 120);
+
+        /*
+        * Draw Shadow
+        * */
+        switch(mCurrentMode){
+            case PULL_FROM_END:
+                mScrollView.drawBottomShadow(mScrollView.getScrollY()+mScrollView.getHeight()-realOffsetY,
+                        mScrollView.getScrollY()+mScrollView.getHeight(), 120);
+                break;
+            case PULL_FROM_START:
+            default:
+                mScrollView.drawTopShadow(mScrollView.getScrollY(), -realOffsetY, 120);
+                break;
+        }
         mScrollView.invalidate();
+
         return realOffsetY;
     }
 
