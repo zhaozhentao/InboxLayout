@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 
 import com.zzt.inboxlayout.widget.InboxLayout;
+import com.zzt.inboxlayout.widget.InboxScrollView;
 
 
 /**
@@ -23,10 +24,10 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
-        final ScrollView scrollView = (ScrollView)findViewById(R.id.scroll);
+        final InboxScrollView inboxScrollView = (InboxScrollView)findViewById(R.id.scroll);
         inboxLayout = (InboxLayout)findViewById(R.id.myframelayout);
         ListView listView = (ListView)findViewById(R.id.list);
-        inboxLayout.setParentScrollView(scrollView);
+        inboxLayout.setParentScrollView(inboxScrollView);
         listView.setAdapter(new BaseAdapter() {
             @Override
             public int getCount() {

@@ -7,7 +7,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <ScrollView
+        <com.zzt.inboxlayout.widget.InboxScrollView
             android:scrollbars="none"
             android:id="@+id/scroll"
             android:layout_width="match_parent"
@@ -59,7 +59,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
                 </LinearLayout>
-        </ScrollView>
+        </com.zzt.inboxlayout.widget.InboxScrollView>
 
         <com.zzt.inboxlayout.widget.InboxLayout
             android:id="@+id/myframelayout"
