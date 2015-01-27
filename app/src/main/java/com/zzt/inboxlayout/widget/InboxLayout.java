@@ -299,11 +299,7 @@ public class InboxLayout extends FrameLayout {
         }
 
         if (oldScrollValue != newScrollValue) {
-            if (null == mScrollAnimationInterpolator) {
-                mScrollAnimationInterpolator = new DecelerateInterpolator();
-            }
             mCurrentSmoothScrollRunnable = new SmoothScrollRunnable(oldScrollValue, newScrollValue, duration);
-
             if (delayMillis > 0) {
                 postDelayed(mCurrentSmoothScrollRunnable, delayMillis);
             } else {
@@ -312,7 +308,7 @@ public class InboxLayout extends FrameLayout {
         }
     }
 
-    private Interpolator mScrollAnimationInterpolator;
+    private Interpolator mScrollAnimationInterpolator = new DecelerateInterpolator();
     final class SmoothScrollRunnable implements Runnable {
         private final Interpolator mInterpolator;
         private final int mScrollToY;
@@ -403,8 +399,8 @@ public class InboxLayout extends FrameLayout {
         if(mHeightAnimator == null){
             mHeightAnimator = ObjectAnimator.ofInt(this, aHeight, 0, mScrollView.getHeight());
             mScrollYAnimator = ObjectAnimator.ofInt(this, aScrollY, mScrollView.getScrollY(), this.getTop());
-            mHeightAnimator.setDuration(1000);
-            mScrollYAnimator.setDuration(1000);
+            mHeightAnimator.setDuration(300);
+            mScrollYAnimator.setDuration(300);
             animatorSet.playTogether(mHeightAnimator, mScrollYAnimator);
             animatorSet.setInterpolator(mInterpolator);
         }
@@ -422,7 +418,7 @@ public class InboxLayout extends FrameLayout {
             public void run() {
                 setVisibility(View.VISIBLE);
             }
-        }, 1000);
+        }, 300);
     }
 
     public void rollBackAnim(){
@@ -430,7 +426,7 @@ public class InboxLayout extends FrameLayout {
         if(animatorSet.isRunning()){
             animatorSet.cancel();
         }
-        mHeightAnimator.setIntValues( mScrollView.getHeight(), 0);
+        mHeightAnimator.setIntValues(heightRange, 0);
         mScrollYAnimator.setIntValues(mScrollView.getScrollY(), beginScrollY);
         animatorSet.start();
     }
@@ -444,7 +440,6 @@ public class InboxLayout extends FrameLayout {
         public void set(InboxLayout object, Integer value) {
             object.mHeight = value;
             anim();
-
             if(0==value&&!shouldDoOnStop){
                 topView.setAlpha(1);
             }
