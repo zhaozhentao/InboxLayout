@@ -32,9 +32,9 @@ public class InboxScrollView extends ScrollView{
     public InboxScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mTopSmallShadowDrawable = new GradientDrawable(
-                GradientDrawable.Orientation.BOTTOM_TOP, new int[]{0x66404040, 0});
+                GradientDrawable.Orientation.BOTTOM_TOP, new int[]{0x66303030, 0});
         mBottomSmallShadowDrawable = new GradientDrawable(
-                GradientDrawable.Orientation.TOP_BOTTOM, new int[]{0x66404040, 0});
+                GradientDrawable.Orientation.TOP_BOTTOM, new int[]{0x66303030, 0});
     }
 
     @Override

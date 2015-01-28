@@ -308,18 +308,9 @@ public class InboxLayout extends FrameLayout {
 
         @Override
         public void run() {
-            /**
-             * Only set mStartTime if this is the first time we're starting,
-             * else actually calculate the Y delta
-             */
             if (mStartTime == -1) {
                 mStartTime = System.currentTimeMillis();
             } else {
-                /**
-                 * We do do all calculations in long to reduce software float
-                 * calculations. We use 1000 as it gives us good accuracy and
-                 * small rounding errors
-                 */
                 long normalizedTime = (1000 * (System.currentTimeMillis() - mStartTime)) / mDuration;
                 normalizedTime = Math.max(Math.min(normalizedTime, 1000), 0);
 
@@ -335,9 +326,8 @@ public class InboxLayout extends FrameLayout {
                 if(shouldRollback) {
                     mScrollView.scrollBy(0, -offsetY);
                 }
-                //setHeaderScroll(mCurrentY);
             }
-            // If we're not at the target Y, keep going...
+            // keep going...
             if (mContinueRunning && mScrollToY != mCurrentY) {
                 InboxLayout.this.postDelayed(this, 16);
             } else {
@@ -456,7 +446,7 @@ public class InboxLayout extends FrameLayout {
             heightChangeAnim();
 
             if(IsStartAnim && value == heightRange){
-                //Open Anim Atop
+                //Open Anim Stop
                 mScrollView.needToDrawSmallShadow = true;
             }else if(!IsStartAnim && value == 0){
                 //Close Anim Stop
