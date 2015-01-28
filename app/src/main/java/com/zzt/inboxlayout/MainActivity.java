@@ -27,7 +27,7 @@ public class MainActivity extends ActionBarActivity {
         final InboxScrollView inboxScrollView = (InboxScrollView)findViewById(R.id.scroll);
         inboxLayout = (InboxLayout)findViewById(R.id.myframelayout);
         ListView listView = (ListView)findViewById(R.id.list);
-        inboxLayout.setParentScrollView(inboxScrollView);
+        inboxLayout.setBackgroundScrollView(inboxScrollView);
         listView.setAdapter(new BaseAdapter() {
             @Override
             public int getCount() {

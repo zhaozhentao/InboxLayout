@@ -269,7 +269,7 @@ public class InboxLayout extends FrameLayout {
                 break;
             case PULL_FROM_START:
             default:
-                mScrollView.drawTopShadow(mScrollView.getScrollY(), -realOffsetY, 120);
+                mScrollView.drawTopShadow(mScrollView.getScrollY(), -realOffsetY, 60);
                 break;
         }
         mScrollView.invalidate();
@@ -372,7 +372,7 @@ public class InboxLayout extends FrameLayout {
         }
     }
 
-    public void setParentScrollView(InboxScrollView scrollView){
+    public void setBackgroundScrollView(InboxScrollView scrollView){
         mScrollView = scrollView;
     }
 
@@ -386,9 +386,10 @@ public class InboxLayout extends FrameLayout {
     private Interpolator mInterpolator = new DecelerateInterpolator();
     private int beginScrollY;
     private int heightRange;
-    private boolean shouldDoOnStop;
+    private boolean IsStartAnim = false;
 
     public void startAnim(View topView){
+        IsStartAnim = true;
         this.topView = topView;
         layoutParams = topView.getLayoutParams();
         topView.setAlpha(0);
@@ -408,7 +409,6 @@ public class InboxLayout extends FrameLayout {
         heightRange = mScrollView.getHeight()-topView.getHeight();
         mHeightAnimator.setIntValues(0, heightRange);
         mScrollYAnimator.setIntValues(beginScrollY, topView.getTop());
-        shouldDoOnStop = true;
         mScrollView.needToDrawShadow = true;
         mScrollView.drawTopShadow(mScrollView.getScrollY(), topView.getTop()-mScrollView.getScrollY(), 0);
         mScrollView.drawBottomShadow(topView.getBottom(), mScrollView.getScrollY()+mScrollView.getHeight(), 0);
@@ -422,7 +422,7 @@ public class InboxLayout extends FrameLayout {
     }
 
     public void rollBackAnim(){
-        shouldDoOnStop = false;
+        IsStartAnim = false;
         if(animatorSet.isRunning()){
             animatorSet.cancel();
         }
@@ -440,20 +440,14 @@ public class InboxLayout extends FrameLayout {
         public void set(InboxLayout object, Integer value) {
             object.mHeight = value;
             anim();
-            if(0==value&&!shouldDoOnStop){
+            if(IsStartAnim && value == heightRange){
+                //open anim stop
+            }else if(!IsStartAnim && value == 0){
+                //close anim stop
                 topView.setAlpha(1);
-            }
-            if(mScrollView.getHeight() == value){
-                if(mOnAnimStopListener!=null&&shouldDoOnStop)
-                    mOnAnimStopListener.onAnimStop();
             }
         }
     };
-
-    private void anim(){
-        ((LinearLayout.LayoutParams)layoutParams).bottomMargin = mHeight;
-        topView.setLayoutParams(layoutParams);
-    }
 
     Property<InboxLayout, Integer> aScrollY = new Property<InboxLayout, Integer>(Integer.class, "iScrollY"){
         @Override
@@ -467,19 +461,17 @@ public class InboxLayout extends FrameLayout {
         }
     };
 
+    private void anim(){
+        ((LinearLayout.LayoutParams)layoutParams).bottomMargin = mHeight;
+        topView.setLayoutParams(layoutParams);
+    }
+
     private int alpha;
     private void scrollAnim(){
-        alpha = 120 * mHeight/heightRange;
+        alpha = 60 * mHeight/heightRange;
         mScrollView.scrollTo(0, iScrollY);
         mScrollView.drawTopShadow(iScrollY, topView.getTop()-iScrollY, alpha);
         mScrollView.drawBottomShadow(topView.getBottom()+mHeight, mScrollView.getScrollY()+mScrollView.getHeight(), alpha);
     }
 
-    private OnAnimStopListener mOnAnimStopListener;
-    public void setOnAnimStopListener( OnAnimStopListener onAnimStopListener){
-        mOnAnimStopListener = onAnimStopListener;
-    }
-    public interface OnAnimStopListener{
-        public void onAnimStop();
-    }
 }
