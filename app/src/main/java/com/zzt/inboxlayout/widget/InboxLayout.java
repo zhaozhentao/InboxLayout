@@ -432,9 +432,17 @@ public class InboxLayout extends FrameLayout {
         animatorSet.start();
     }
 
-    private void anim(){
+    private void heightChangeAnim(){
         ((LinearLayout.LayoutParams)layoutParams).bottomMargin = mHeight;
         topView.setLayoutParams(layoutParams);
+    }
+
+    private int alpha;
+    private void scrollChangeAnim(){
+        alpha = 60 * mHeight/heightRange;
+        mScrollView.scrollTo(0, iScrollY);
+        mScrollView.drawTopShadow(iScrollY, topView.getTop()-iScrollY, alpha);
+        mScrollView.drawBottomShadow(topView.getBottom()+mHeight, mScrollView.getScrollY()+mScrollView.getHeight(), alpha);
     }
 
     Property<InboxLayout, Integer> aHeight = new Property<InboxLayout, Integer>(Integer.class, "mHeight") {
@@ -453,7 +461,7 @@ public class InboxLayout extends FrameLayout {
                 topView.setAlpha(1);
 
             }
-            anim();
+            heightChangeAnim();
         }
     };
 
@@ -465,16 +473,8 @@ public class InboxLayout extends FrameLayout {
         @Override
         public void set(InboxLayout object, Integer value) {
             object.iScrollY = value;
-            scrollAnim();
+            scrollChangeAnim();
         }
     };
-
-    private int alpha;
-    private void scrollAnim(){
-        alpha = 60 * mHeight/heightRange;
-        mScrollView.scrollTo(0, iScrollY);
-        mScrollView.drawTopShadow(iScrollY, topView.getTop()-iScrollY, alpha);
-        mScrollView.drawBottomShadow(topView.getBottom()+mHeight, mScrollView.getScrollY()+mScrollView.getHeight(), alpha);
-    }
 
 }
