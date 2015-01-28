@@ -13,6 +13,7 @@ import android.widget.ScrollView;
  */
 public class InboxScrollView extends ScrollView{
 
+    public boolean needToDrawSmallShadow = false;
     public boolean needToDrawShadow = false;
     protected static final int MAX_MENU_OVERLAY_ALPHA = 185;
     private Drawable mTopSmallShadowDrawable;
@@ -53,8 +54,10 @@ public class InboxScrollView extends ScrollView{
         if(needToDrawShadow) {
             mTopShadow.draw(canvas);
             mBottomShadow.draw(canvas);
-            //mTopSmallShadowDrawable.draw(canvas);
-            //mBottomSmallShadowDrawable.draw(canvas);
+        }
+        if(needToDrawSmallShadow){
+            mTopSmallShadowDrawable.draw(canvas);
+            mBottomSmallShadowDrawable.draw(canvas);
         }
     }
 
@@ -67,13 +70,17 @@ public class InboxScrollView extends ScrollView{
     public void drawTopShadow(int top, int height, int alpha){
         mTopShadow.setBounds(0, top, getWidth(), top+height);
         mTopShadow.setAlpha(alpha);
-        mTopSmallShadowDrawable.setBounds(0, top+height-50, getWidth(), top+height);
+        if(needToDrawSmallShadow) {
+            mTopSmallShadowDrawable.setBounds(0, top + height - 50, getWidth(), top + height);
+        }
     }
 
     public void drawBottomShadow(int top, int bottom, int alpha){
         mBottomShadow.setBounds(0, top, getWidth(), bottom);
         mBottomShadow.setAlpha(alpha);
-        mBottomSmallShadowDrawable.setBounds(0, top, getWidth(), top+50);
+        if(needToDrawSmallShadow) {
+            mBottomSmallShadowDrawable.setBounds(0, top, getWidth(), top + 50);
+        }
         invalidate();
     }
 
