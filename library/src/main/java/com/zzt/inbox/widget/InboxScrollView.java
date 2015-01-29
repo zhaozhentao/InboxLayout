@@ -1,4 +1,4 @@
-package com.zzt.inboxlayout.widget;
+package com.zzt.inbox.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;

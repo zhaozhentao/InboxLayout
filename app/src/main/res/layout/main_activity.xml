@@ -7,7 +7,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <com.zzt.inboxlayout.widget.InboxScrollView
+        <com.zzt.inbox.widget.InboxScrollView
             android:scrollbars="none"
             android:id="@+id/scroll"
             android:layout_width="match_parent"
@@ -59,9 +59,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
                 </LinearLayout>
-        </com.zzt.inboxlayout.widget.InboxScrollView>
+        </com.zzt.inbox.widget.InboxScrollView>
 
-        <com.zzt.inboxlayout.widget.InboxLayout
+        <com.zzt.inbox.widget.InboxLayout
             android:id="@+id/myframelayout"
             android:visibility="invisible"
             android:layout_width="match_parent"
@@ -72,7 +72,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
             </ListView>
-        </com.zzt.inboxlayout.widget.InboxLayout>
+        </com.zzt.inbox.widget.InboxLayout>
 
     </FrameLayout>
 </LinearLayout>

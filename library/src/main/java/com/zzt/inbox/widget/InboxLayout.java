@@ -1,16 +1,10 @@
-package com.zzt.inboxlayout.widget;
+package com.zzt.inbox.widget;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.provider.Telephony;
-import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.Property;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,8 +16,6 @@ import android.widget.Adapter;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ScrollView;
-import android.widget.Scroller;
 
 /**
  * Created by zzt on 2015/1/19.
@@ -284,8 +276,6 @@ public class InboxLayout extends FrameLayout {
     }
 
     private SmoothScrollRunnable mCurrentSmoothScrollRunnable;
-
-
     private Interpolator mScrollAnimationInterpolator = new DecelerateInterpolator();
     final class SmoothScrollRunnable implements Runnable {
         private final Interpolator mInterpolator;

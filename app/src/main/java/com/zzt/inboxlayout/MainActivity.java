@@ -8,10 +8,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ScrollView;
 
-import com.zzt.inboxlayout.widget.InboxLayout;
-import com.zzt.inboxlayout.widget.InboxScrollView;
+import com.zzt.inbox.widget.InboxLayout;
+import com.zzt.inbox.widget.InboxScrollView;
 
 
 /**
