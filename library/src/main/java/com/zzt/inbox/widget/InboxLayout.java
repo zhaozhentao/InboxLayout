@@ -16,6 +16,7 @@ import android.widget.Adapter;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.zzt.inbox.interfaces.OnDragStateChangeListener;
 
@@ -25,7 +26,9 @@ import com.zzt.inbox.interfaces.OnDragStateChangeListener;
 public class InboxLayout extends FrameLayout {
 
     private View topView;
-
+    public final static int LINEARPARAMS = 1;
+    public final static int RELATIVEPARAMS = 2;
+    private int params = 0;
     private float mLastMotionX, mLastMotionY;
     private float mInitialMotionX, mInitialMotionY;
     private ListView mRefreshableView;
@@ -383,6 +386,8 @@ public class InboxLayout extends FrameLayout {
     private int iScrollY;
     private InboxScrollView mScrollView;
     private ViewGroup.LayoutParams layoutParams;
+    private LinearLayout.LayoutParams linearLayoutParams;
+    private RelativeLayout.LayoutParams relativeLayoutParams;
     private AnimatorSet animatorSet = new AnimatorSet();
     private ObjectAnimator mHeightAnimator;
     private ObjectAnimator mScrollYAnimator;
@@ -391,10 +396,21 @@ public class InboxLayout extends FrameLayout {
     private int heightRange;
     private boolean IsStartAnim = false;
 
-    public void openWithAnim(View topView){
+    public void openWithAnim(View topView) throws Exception{
         IsStartAnim = true;
         this.topView = topView;
+
         layoutParams = topView.getLayoutParams();
+        if(layoutParams instanceof LinearLayout.LayoutParams){
+            params = LINEARPARAMS;
+            linearLayoutParams = (LinearLayout.LayoutParams)layoutParams;
+        }else if(layoutParams instanceof RelativeLayout.LayoutParams){
+            params = RELATIVEPARAMS;
+            relativeLayoutParams = (RelativeLayout.LayoutParams)layoutParams;
+        }else{
+            throw new Exception("topView's parent should be LinearLayout or RelativeLayout");
+        }
+
         topView.setAlpha(0);
         if(animatorSet.isRunning()){
             animatorSet.cancel();
@@ -433,7 +449,15 @@ public class InboxLayout extends FrameLayout {
     }
 
     private void heightChangeAnim(){
-        ((LinearLayout.LayoutParams)layoutParams).bottomMargin = mHeight;
+        switch (params){
+            case LINEARPARAMS:
+                linearLayoutParams.bottomMargin = mHeight;
+                break;
+            case RELATIVEPARAMS:
+                relativeLayoutParams.bottomMargin = mHeight;
+                break;
+        }
+
         topView.setLayoutParams(layoutParams);
     }
 
