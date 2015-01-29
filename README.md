@@ -5,7 +5,7 @@
 ![image](https://raw.githubusercontent.com/zhaozhentao/InboxLayout/master/screenshot/demo.gif)
 
 # Usage
-##step 1
+###step 1
 实现类似的布局, 具体可参考demo
 
     <FrameLayout
@@ -39,14 +39,14 @@
         </com.zzt.inbox.widget.InboxLayout>
     </FrameLayout>
 
-##step 2
+###step 2
 
     final InboxScrollView inboxScrollView = (InboxScrollView)findViewById(R.id.scroll);
     inboxLayout = (InboxLayout)findViewById(R.id.inboxlayout);             
     inboxLayout.seBackgroundScrollView(inboxScrollView); //将inboxScrollView 与 inboxlayout绑定,由inboxlayout带动inboxScrollView滚动
     
     
-##step 3
+###step 3
  
     final LinearLayout dingdan = (LinearLayout)findViewById(R.id.ding_dan);
     dingdan.setOnClickListener(new View.OnClickListener() {
