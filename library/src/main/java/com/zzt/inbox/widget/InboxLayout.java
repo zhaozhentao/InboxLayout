@@ -17,21 +17,47 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.zzt.inbox.interfaces.OnDragStateChangeListener;
+
 /**
  * Created by zzt on 2015/1/19.
  */
 public class InboxLayout extends FrameLayout {
 
     private View topView;
-    private boolean mIsBeingDragged = false;
+
     private float mLastMotionX, mLastMotionY;
     private float mInitialMotionX, mInitialMotionY;
     private ListView mRefreshableView;
     private int mTouchSlop;
-    private boolean mFilterTouchEvents = true;
-    private Mode mMode = Mode.getDefault();
-    private boolean shouldRollback;
     private int ANIMDURA = 300;
+    private boolean mIsBeingDragged = false;
+    private boolean mFilterTouchEvents = true;
+    private boolean shouldRollback;
+    private Mode mMode = Mode.getDefault();
+    private OnDragStateChangeListener onDragStateChangeListener;
+
+    private Mode mCurrentMode;
+    private static enum Mode{
+        DISABLED(0x0),
+        PULL_FROM_START(0x1),
+        PULL_FROM_END(0x2),
+        BOTH(0x3);
+        private int mIntValue;
+        Mode(int modeInt) {
+            mIntValue = modeInt;
+        }
+        static Mode getDefault() {
+            return BOTH;
+        }
+    }
+
+    private DragState dragState = DragState.CANNOTCLOSE;
+    public static enum DragState{
+        CANCLOSE(0x0),
+        CANNOTCLOSE(0X1);
+        DragState(int value){}
+    };
 
     public InboxLayout(Context context) {
         this(context, null);
@@ -88,7 +114,7 @@ public class InboxLayout extends FrameLayout {
                     absDiff = Math.abs(diff);
 
                     if (absDiff > mTouchSlop && (!mFilterTouchEvents || absDiff > Math.abs(oppositeDiff))) {
-                        if (mMode.showHeaderLoadingLayout() && diff >= 1f && isReadyForPullStart()) {
+                        if (diff >= 1f && isReadyForPullStart()) {
                             mLastMotionY = y;
                             mLastMotionX = x;
                             mIsBeingDragged = true;//这里返回了true 本次触摸就本类拦截了, 接下来的触摸事件由本类的onTouchEvent处理
@@ -96,7 +122,7 @@ public class InboxLayout extends FrameLayout {
                             if (mMode == Mode.BOTH) {
                                 mCurrentMode = Mode.PULL_FROM_START;
                             }
-                        }else if (mMode.showFooterLoadingLayout() && diff <= -1f && isReadyForPullEnd()) {
+                        }else if (diff <= -1f && isReadyForPullEnd()) {
                             mLastMotionY = y;
                             mLastMotionX = x;
                             mIsBeingDragged = true;
@@ -109,28 +135,6 @@ public class InboxLayout extends FrameLayout {
                 break;
         }
         return mIsBeingDragged;
-    }
-
-    private Mode mCurrentMode;
-    private static enum Mode{
-        DISABLED(0x0),
-        PULL_FROM_START(0x1),
-        PULL_FROM_END(0x2),
-        BOTH(0x3);
-        private int mIntValue;
-        Mode(int modeInt) {
-            mIntValue = modeInt;
-        }
-        static Mode getDefault() {
-            return BOTH;
-        }
-        public boolean showHeaderLoadingLayout() {
-            return this == PULL_FROM_START || this == BOTH;
-        }
-        public boolean showFooterLoadingLayout() {
-            return this == PULL_FROM_END || this == BOTH;
-        }
-
     }
 
     private boolean isReadyForPull(){
@@ -214,7 +218,7 @@ public class InboxLayout extends FrameLayout {
                     mIsBeingDragged = false;
                     if(true){
                         smoothScrollTo(0, 200, 0);
-                        PrevOffSetY = 0;//清零
+                        prevOffSetY = 0;//清零
                         return true;
                     }
                     return true;
@@ -247,16 +251,23 @@ public class InboxLayout extends FrameLayout {
     }
 
     private int realOffsetY;
-    private int PrevOffSetY = 0;
+    private int prevOffSetY = 0;
     private int dy;
     private int moveContent(int offsetY){
 
         realOffsetY = (int)(offsetY/1.4f);
         scrollTo(0, realOffsetY);
-        dy = PrevOffSetY - realOffsetY;
-        PrevOffSetY = realOffsetY;
+        dy = prevOffSetY - realOffsetY;
+        prevOffSetY = realOffsetY;
         mScrollView.scrollBy(0, -dy);
 
+        if(realOffsetY<-200||realOffsetY>200&&onDragStateChangeListener!=null){
+            onDragStateChangeListener.dragStateChange(DragState.CANCLOSE);
+            dragState = DragState.CANCLOSE;
+        }else if(dragState == DragState.CANCLOSE && realOffsetY<200 && realOffsetY >-200){
+            onDragStateChangeListener.dragStateChange(DragState.CANNOTCLOSE);
+            dragState = DragState.CANNOTCLOSE;
+        }
         /*
         * Draw Shadow
         * */
@@ -342,7 +353,7 @@ public class InboxLayout extends FrameLayout {
             postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    closeWithAnmi();
+                    closeWithAnim();
                 }
             }, 100);
             shouldRollback = false;
@@ -362,6 +373,10 @@ public class InboxLayout extends FrameLayout {
 
     public void seBackgroundScrollView(InboxScrollView scrollView){
         mScrollView = scrollView;
+    }
+
+    public void setOnDragStateChangeListener(OnDragStateChangeListener listener){
+        onDragStateChangeListener = listener;
     }
 
     private int mHeight = 0;
@@ -401,12 +416,17 @@ public class InboxLayout extends FrameLayout {
         }, ANIMDURA);
     }
 
-    public void closeWithAnmi(){
+    public void closeWithAnim(){
         mScrollView.needToDrawSmallShadow = false;
         IsStartAnim = false;
+        dragState = DragState.CANNOTCLOSE;
+        if(onDragStateChangeListener!=null){
+            onDragStateChangeListener.dragStateChange(dragState);
+        }
         if(animatorSet.isRunning()){
             animatorSet.cancel();
         }
+
         mHeightAnimator.setIntValues(heightRange, 0);
         mScrollYAnimator.setIntValues(mScrollView.getScrollY(), beginScrollY);
         animatorSet.start();

@@ -1,5 +1,6 @@
 package com.zzt.inboxlayout;
 
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.zzt.inbox.interfaces.OnDragStateChangeListener;
 import com.zzt.inbox.widget.InboxLayout;
 import com.zzt.inbox.widget.InboxScrollView;
 
@@ -24,9 +26,27 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.main_activity);
 
         final InboxScrollView inboxScrollView = (InboxScrollView)findViewById(R.id.scroll);
-        inboxLayout = (InboxLayout)findViewById(R.id.myframelayout);
-        ListView listView = (ListView)findViewById(R.id.list);
+        inboxLayout = (InboxLayout)findViewById(R.id.inboxlayout);
         inboxLayout.seBackgroundScrollView(inboxScrollView);
+
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0xdd000000));
+        inboxLayout.setOnDragStateChangeListener(new OnDragStateChangeListener() {
+            @Override
+            public void dragStateChange(InboxLayout.DragState state) {
+                switch (state){
+                    case CANCLOSE:
+                        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0xff5e5e5e));
+                        getSupportActionBar().setTitle("back");
+                        break;
+                    case CANNOTCLOSE:
+                        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0xdd000000));
+                        getSupportActionBar().setTitle("InboxLayout");
+                        break;
+                }
+            }
+        });
+
+        ListView listView = (ListView)findViewById(R.id.list);
         listView.setAdapter(new BaseAdapter() {
             @Override
             public int getCount() {
