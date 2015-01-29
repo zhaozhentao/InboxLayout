@@ -34,6 +34,7 @@ public class InboxLayout extends FrameLayout {
     private ListView mRefreshableView;
     private int mTouchSlop;
     private int ANIMDURA = 300;
+    private int closeDistance;
     private boolean mIsBeingDragged = false;
     private boolean mFilterTouchEvents = true;
     private boolean shouldRollback;
@@ -78,6 +79,8 @@ public class InboxLayout extends FrameLayout {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             this.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         }
+
+        closeDistance = dp2px(60);
 
         mHeightAnimator = ObjectAnimator.ofInt(this, aHeight, 0, 0);
         mScrollYAnimator = ObjectAnimator.ofInt(this, aScrollY, 0, 0);
@@ -264,10 +267,10 @@ public class InboxLayout extends FrameLayout {
         prevOffSetY = realOffsetY;
         mScrollView.scrollBy(0, -dy);
 
-        if(realOffsetY<-200||realOffsetY>200&&onDragStateChangeListener!=null){
+        if(realOffsetY<-closeDistance||realOffsetY>closeDistance&&onDragStateChangeListener!=null){
             onDragStateChangeListener.dragStateChange(DragState.CANCLOSE);
             dragState = DragState.CANCLOSE;
-        }else if(dragState == DragState.CANCLOSE && realOffsetY<200 && realOffsetY >-200){
+        }else if(dragState == DragState.CANCLOSE && realOffsetY<closeDistance && realOffsetY >-closeDistance){
             onDragStateChangeListener.dragStateChange(DragState.CANNOTCLOSE);
             dragState = DragState.CANNOTCLOSE;
         }
@@ -351,7 +354,7 @@ public class InboxLayout extends FrameLayout {
         final int oldScrollValue;
         oldScrollValue = getScrollY();
 
-        if(oldScrollValue<-200||oldScrollValue>200){
+        if(oldScrollValue<-closeDistance||oldScrollValue>closeDistance){
             setVisibility(View.INVISIBLE);
             postDelayed(new Runnable() {
                 @Override
@@ -380,6 +383,10 @@ public class InboxLayout extends FrameLayout {
 
     public void setOnDragStateChangeListener(OnDragStateChangeListener listener){
         onDragStateChangeListener = listener;
+    }
+
+    public void setCloseDistance(int dp){
+        closeDistance = dp2px(dp);
     }
 
     private int mHeight = 0;
@@ -501,5 +508,9 @@ public class InboxLayout extends FrameLayout {
             scrollYChangeAnim();
         }
     };
+
+    private int dp2px(float dp){
+        return (int) (dp * getContext().getResources().getDisplayMetrics().density + 0.5f);
+    }
 
 }

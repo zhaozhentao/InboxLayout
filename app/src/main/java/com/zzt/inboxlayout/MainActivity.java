@@ -28,12 +28,13 @@ public class MainActivity extends ActionBarActivity {
         final InboxScrollView inboxScrollView = (InboxScrollView)findViewById(R.id.scroll);
         inboxLayout = (InboxLayout)findViewById(R.id.inboxlayout);
         inboxLayout.seBackgroundScrollView(inboxScrollView);
+        inboxLayout.setCloseDistance(50);
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0xdd000000));
         inboxLayout.setOnDragStateChangeListener(new OnDragStateChangeListener() {
             @Override
             public void dragStateChange(InboxLayout.DragState state) {
-                switch (state){
+                switch (state) {
                     case CANCLOSE:
                         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0xff5e5e5e));
                         getSupportActionBar().setTitle("back");
@@ -74,12 +75,15 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-    private void init(){
+    private void init() {
         final LinearLayout dingdan = (LinearLayout)findViewById(R.id.ding_dan);
         dingdan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                inboxLayout.openWithAnim(dingdan);
+                try {
+                    inboxLayout.openWithAnim(dingdan);
+                }catch (Exception e){
+                }
             }
         });
 
@@ -87,7 +91,10 @@ public class MainActivity extends ActionBarActivity {
         yuding.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                inboxLayout.openWithAnim(yuding);
+                try {
+                    inboxLayout.openWithAnim(yuding);
+                }catch (Exception e){
+                }
             }
         });
 
@@ -95,7 +102,10 @@ public class MainActivity extends ActionBarActivity {
         tuijian.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                inboxLayout.openWithAnim(tuijian);
+                try {
+                    inboxLayout.openWithAnim(tuijian);
+                }catch (Exception e){
+                }
             }
         });
 
@@ -103,7 +113,10 @@ public class MainActivity extends ActionBarActivity {
         member.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                inboxLayout.openWithAnim(member);
+                try {
+                    inboxLayout.openWithAnim(member);
+                }catch (Exception e){
+                }
             }
         });
 
@@ -111,7 +124,10 @@ public class MainActivity extends ActionBarActivity {
         choujiang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                inboxLayout.openWithAnim(choujiang);
+                try {
+                    inboxLayout.openWithAnim(choujiang);
+                }catch (Exception e){
+                }
             }
         });
 
@@ -119,7 +135,10 @@ public class MainActivity extends ActionBarActivity {
         diyongquan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                inboxLayout.openWithAnim(diyongquan);
+                try {
+                    inboxLayout.openWithAnim(diyongquan);
+                }catch (Exception e){
+                }
             }
         });
     }
