@@ -4,5 +4,5 @@
 + QQ:344696734
 + 微信:哦哦哦哦哦哦
 
-![](https://raw.githubusercontent.com/zhaozhentao/InboxLayout/master/screenshot/demo.gif)
+![image](https://raw.githubusercontent.com/zhaozhentao/InboxLayout/master/screenshot/demo.gif)
 
