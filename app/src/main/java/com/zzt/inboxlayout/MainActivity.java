@@ -27,7 +27,7 @@ public class MainActivity extends ActionBarActivity {
 
         final InboxScrollView inboxScrollView = (InboxScrollView)findViewById(R.id.scroll);
         inboxLayout = (InboxLayout)findViewById(R.id.inboxlayout);
-        inboxLayout.seBackgroundScrollView(inboxScrollView);
+        inboxLayout.seBackgroundScrollView(inboxScrollView);//绑定scrollview
         inboxLayout.setCloseDistance(50);
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0xdd000000));
@@ -80,10 +80,7 @@ public class MainActivity extends ActionBarActivity {
         dingdan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    inboxLayout.openWithAnim(dingdan);
-                }catch (Exception e){
-                }
+                inboxLayout.openWithAnim(dingdan);
             }
         });
 
@@ -91,10 +88,7 @@ public class MainActivity extends ActionBarActivity {
         yuding.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    inboxLayout.openWithAnim(yuding);
-                }catch (Exception e){
-                }
+                inboxLayout.openWithAnim(yuding);
             }
         });
 
@@ -102,10 +96,7 @@ public class MainActivity extends ActionBarActivity {
         tuijian.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    inboxLayout.openWithAnim(tuijian);
-                }catch (Exception e){
-                }
+                inboxLayout.openWithAnim(tuijian);
             }
         });
 
@@ -113,10 +104,7 @@ public class MainActivity extends ActionBarActivity {
         member.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    inboxLayout.openWithAnim(member);
-                }catch (Exception e){
-                }
+                inboxLayout.openWithAnim(member);
             }
         });
 
@@ -124,10 +112,7 @@ public class MainActivity extends ActionBarActivity {
         choujiang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    inboxLayout.openWithAnim(choujiang);
-                }catch (Exception e){
-                }
+                inboxLayout.openWithAnim(choujiang);
             }
         });
 
@@ -135,10 +120,7 @@ public class MainActivity extends ActionBarActivity {
         diyongquan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    inboxLayout.openWithAnim(diyongquan);
-                }catch (Exception e){
-                }
+                inboxLayout.openWithAnim(diyongquan);
             }
         });
     }

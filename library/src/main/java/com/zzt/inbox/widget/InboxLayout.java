@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.Property;
 import android.view.MotionEvent;
 import android.view.View;
@@ -400,10 +401,11 @@ public class InboxLayout extends FrameLayout {
     private ObjectAnimator mScrollYAnimator;
     private Interpolator mInterpolator = new DecelerateInterpolator();
     private int beginScrollY;
+    private int beginBottomMargin;
     private int heightRange;
     private boolean IsStartAnim = false;
 
-    public void openWithAnim(View topView) throws Exception{
+    public void openWithAnim(View topView) {
         IsStartAnim = true;
         this.topView = topView;
 
@@ -411,21 +413,25 @@ public class InboxLayout extends FrameLayout {
         if(layoutParams instanceof LinearLayout.LayoutParams){
             params = LINEARPARAMS;
             linearLayoutParams = (LinearLayout.LayoutParams)layoutParams;
+            heightRange = linearLayoutParams.bottomMargin;
         }else if(layoutParams instanceof RelativeLayout.LayoutParams){
             params = RELATIVEPARAMS;
             relativeLayoutParams = (RelativeLayout.LayoutParams)layoutParams;
+            heightRange = relativeLayoutParams.bottomMargin;
         }else{
-            throw new Exception("topView's parent should be LinearLayout or RelativeLayout");
+            Log.e("error", "topView's parent should be linearlayout or relativelayout");
+            return ;
         }
 
+        beginBottomMargin = heightRange;
         topView.setAlpha(0);
         if(animatorSet.isRunning()){
             animatorSet.cancel();
         }
 
         beginScrollY = mScrollView.getScrollY();
-        heightRange = mScrollView.getHeight()-topView.getHeight();
-        mHeightAnimator.setIntValues(0, heightRange);
+        heightRange = mScrollView.getHeight() - topView.getHeight();
+        mHeightAnimator.setIntValues(beginBottomMargin, heightRange);
         mScrollYAnimator.setIntValues(beginScrollY, topView.getTop());
         mScrollView.needToDrawShadow = true;
         mScrollView.drawTopShadow(beginScrollY, topView.getTop()-beginScrollY, 0);
@@ -450,7 +456,7 @@ public class InboxLayout extends FrameLayout {
             animatorSet.cancel();
         }
 
-        mHeightAnimator.setIntValues(heightRange, 0);
+        mHeightAnimator.setIntValues(heightRange, beginBottomMargin);
         mScrollYAnimator.setIntValues(mScrollView.getScrollY(), beginScrollY);
         animatorSet.start();
     }
@@ -464,7 +470,6 @@ public class InboxLayout extends FrameLayout {
                 relativeLayoutParams.bottomMargin = mHeight;
                 break;
         }
-
         topView.setLayoutParams(layoutParams);
     }
 
@@ -489,7 +494,7 @@ public class InboxLayout extends FrameLayout {
             if(IsStartAnim && value == heightRange){
                 //Open Anim Stop
                 mScrollView.needToDrawSmallShadow = true;
-            }else if(!IsStartAnim && value == 0){
+            }else if(!IsStartAnim && value == beginBottomMargin){
                 //Close Anim Stop
                 topView.setAlpha(1);
             }
