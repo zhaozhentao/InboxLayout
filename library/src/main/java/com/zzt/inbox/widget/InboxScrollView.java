@@ -81,7 +81,6 @@ public class InboxScrollView extends ScrollView{
         if(needToDrawSmallShadow) {
             mBottomSmallShadowDrawable.setBounds(0, top, getWidth(), top + 50);
         }
-        invalidate();
     }
 
 }
