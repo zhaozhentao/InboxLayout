@@ -4,5 +4,7 @@
     <string name="app_name">InboxLayout</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="filler_text">I initially started working on Freshbacks about a year ago as a little side project, a sandbox to try out new things regarding Android development, if you want. But somewhere down the road, my goals with this app got more and more ambitious, with the ultimate goal becoming to create a showcase app, one that shows off how a well-designed Holo (the predecessor of this post’s topic, Material Design) app should look and feel like, in my opinion at least.So, when Material Design came around in the fall of this year, I started thinking about how to integrate the new design elements and possibilities, such as activity transitions and the extraction of prominent colors from pictures, into the Freshbacks app. I basically wanted to keep the main aesthetics of my Holo app, but upgrade it to Material Design in a meaningful way. This is a short documentation of how I managed to do this.</string>
+
 
 </resources>

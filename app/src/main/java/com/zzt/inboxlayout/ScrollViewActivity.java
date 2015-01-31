@@ -3,35 +3,31 @@ package com.zzt.inboxlayout;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 
 import com.zzt.inbox.interfaces.OnDragStateChangeListener;
 import com.zzt.inbox.widget.InboxLayoutBase;
-import com.zzt.inbox.widget.InboxLayoutListView;
+import com.zzt.inbox.widget.InboxLayoutScrollView;
 import com.zzt.inbox.widget.InboxBackgroundScrollView;
 
-
 /**
- * Created by zzt on 2015/1/19.
+ * Created by zzt on 2015/1/31.
  */
-public class MainActivity extends ActionBarActivity {
-    InboxLayoutListView inboxLayoutListView;
+public class ScrollViewActivity extends ActionBarActivity {
+    InboxLayoutScrollView inboxLayoutScrollView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_activity);
+        setContentView(R.layout.scrollview_activity);
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0xdd000000));
 
         final InboxBackgroundScrollView inboxBackgroundScrollView = (InboxBackgroundScrollView)findViewById(R.id.scroll);
-        inboxLayoutListView = (InboxLayoutListView)findViewById(R.id.inboxlayout);
-        inboxLayoutListView.seBackgroundScrollView(inboxBackgroundScrollView);//绑定scrollview
-        inboxLayoutListView.setCloseDistance(50);
-        inboxLayoutListView.setOnDragStateChangeListener(new OnDragStateChangeListener() {
+        inboxLayoutScrollView = (InboxLayoutScrollView)findViewById(R.id.inboxlayout);
+        inboxLayoutScrollView.seBackgroundScrollView(inboxBackgroundScrollView);//绑定scrollview
+        inboxLayoutScrollView.setCloseDistance(50);
+        inboxLayoutScrollView.setOnDragStateChangeListener(new OnDragStateChangeListener() {
             @Override
             public void dragStateChange(InboxLayoutBase.DragState state) {
                 switch (state) {
@@ -46,29 +42,6 @@ public class MainActivity extends ActionBarActivity {
                 }
             }
         });
-        inboxLayoutListView.setAdapter(new BaseAdapter() {
-            @Override
-            public int getCount() {
-                return 20;
-            }
-
-            @Override
-            public Object getItem(int position) {
-                return null;
-            }
-
-            @Override
-            public long getItemId(int position) {
-                return position;
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                LayoutInflater inflater = MainActivity.this.getLayoutInflater();
-                View view = inflater.inflate(R.layout.item, null);
-                return view;
-            }
-        });
 
         init();
     }
@@ -79,7 +52,7 @@ public class MainActivity extends ActionBarActivity {
         dingdan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                inboxLayoutListView.openWithAnim(dingdan);
+                inboxLayoutScrollView.openWithAnim(dingdan);
             }
         });
 
@@ -87,7 +60,7 @@ public class MainActivity extends ActionBarActivity {
         yuding.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                inboxLayoutListView.openWithAnim(yuding);
+                inboxLayoutScrollView.openWithAnim(yuding);
             }
         });
 
@@ -95,7 +68,7 @@ public class MainActivity extends ActionBarActivity {
         tuijian.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                inboxLayoutListView.openWithAnim(tuijian);
+                inboxLayoutScrollView.openWithAnim(tuijian);
             }
         });
 
@@ -103,7 +76,7 @@ public class MainActivity extends ActionBarActivity {
         member.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                inboxLayoutListView.openWithAnim(member);
+                inboxLayoutScrollView.openWithAnim(member);
             }
         });
 
@@ -111,7 +84,7 @@ public class MainActivity extends ActionBarActivity {
         choujiang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                inboxLayoutListView.openWithAnim(choujiang);
+                inboxLayoutScrollView.openWithAnim(choujiang);
             }
         });
 
@@ -119,10 +92,9 @@ public class MainActivity extends ActionBarActivity {
         diyongquan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                inboxLayoutListView.openWithAnim(diyongquan);
+                inboxLayoutScrollView.openWithAnim(diyongquan);
             }
         });
     }
-
 
 }

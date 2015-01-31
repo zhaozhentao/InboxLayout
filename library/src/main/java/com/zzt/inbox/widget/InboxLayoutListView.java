@@ -72,6 +72,4 @@ public class InboxLayoutListView extends InboxLayoutBase <ListView>{
         return false;
     }
 
-
-
 }

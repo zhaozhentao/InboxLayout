@@ -59,15 +59,18 @@
                     android:background="@drawable/pic2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
-                </RelativeLayout>
+            </RelativeLayout>
         </com.zzt.inbox.widget.InboxBackgroundScrollView>
 
-        <com.zzt.inbox.widget.InboxLayoutListView
+        <com.zzt.inbox.widget.InboxLayoutScrollView
             android:id="@+id/inboxlayout"
             android:visibility="invisible"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        </com.zzt.inbox.widget.InboxLayoutListView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" android:text="@string/filler_text"/>
+        </com.zzt.inbox.widget.InboxLayoutScrollView>
 
     </FrameLayout>
 </LinearLayout>

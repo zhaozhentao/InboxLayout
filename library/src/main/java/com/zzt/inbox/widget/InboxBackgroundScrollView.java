@@ -11,7 +11,7 @@ import android.widget.ScrollView;
 /**
  * Created by zzt on 2015/1/27.
  */
-public class InboxScrollView extends ScrollView{
+public class InboxBackgroundScrollView extends ScrollView{
 
     public boolean needToDrawSmallShadow = false;
     public boolean needToDrawShadow = false;
@@ -21,15 +21,15 @@ public class InboxScrollView extends ScrollView{
     private Drawable mTopShadow = new ColorDrawable(0xff000000);
     private Drawable mBottomShadow = new ColorDrawable(0xff000000);
 
-    public InboxScrollView(Context context) {
+    public InboxBackgroundScrollView(Context context) {
         this(context, null);
     }
 
-    public InboxScrollView(Context context, AttributeSet attrs) {
+    public InboxBackgroundScrollView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public InboxScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public InboxBackgroundScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mTopSmallShadowDrawable = new GradientDrawable(
                 GradientDrawable.Orientation.BOTTOM_TOP, new int[]{0x66303030, 0});

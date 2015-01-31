@@ -13,10 +13,8 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
-import android.widget.Adapter;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.zzt.inbox.interfaces.OnDragStateChangeListener;
@@ -32,7 +30,7 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
     private int params = 0;
     private float mLastMotionX, mLastMotionY;
     private float mInitialMotionX, mInitialMotionY;
-    private T mDragableView;
+    protected T mDragableView;
     private int mTouchSlop;
     private int ANIMDURA = 300;
     private int closeDistance;
@@ -148,6 +146,7 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
     }
 
     private boolean isReadyForPull(){
+        System.out.println("is ready for pull");
         switch(mMode){
             case PULL_FROM_START:
                 return isReadyForDragStart();
@@ -159,16 +158,6 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
                 return false;
         }
     }
-
-    private void addDragableView(T DragableView) {
-        addView(DragableView,ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-    }
-
-    protected abstract T createDragableView(Context context, AttributeSet attrs);
-
-    protected abstract boolean isReadyForDragStart();
-
-    protected abstract boolean isReadyForDragEnd();
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -229,6 +218,39 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
         }
         moveContent(newScrollValue);
     }
+
+    private void addDragableView(T DragableView) {
+        addView(DragableView,ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+    }
+
+    protected abstract T createDragableView(Context context, AttributeSet attrs);
+
+    protected abstract boolean isReadyForDragStart();
+
+    protected abstract boolean isReadyForDragEnd();
+
+
+    public final T getDragableView() {
+        return mDragableView;
+    }
+
+
+    @Override
+    public void addView(View child, int index, ViewGroup.LayoutParams params) {
+        Log.d("addview", "addView: " + child.getClass().getSimpleName());
+        final T refreshableView = getDragableView();
+        if(child == refreshableView){
+            super.addView(child, index, params);
+            return ;
+        }
+
+        if (refreshableView instanceof ViewGroup) {
+            ((ViewGroup) refreshableView).addView(child, index, params);
+        } else {
+            throw new UnsupportedOperationException("Refreshable View is not a ViewGroup so can't addView");
+        }
+    }
+
 
     private int realOffsetY;
     private int prevOffSetY = 0;
@@ -350,7 +372,7 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
         }
     }
 
-    public void seBackgroundScrollView(InboxScrollView scrollView){
+    public void seBackgroundScrollView(InboxBackgroundScrollView scrollView){
         mScrollView = scrollView;
     }
 
@@ -364,7 +386,7 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
 
     private int mHeight = 0;
     private int iScrollY;
-    private InboxScrollView mScrollView;
+    private InboxBackgroundScrollView mScrollView;
     private ViewGroup.LayoutParams layoutParams;
     private LinearLayout.LayoutParams linearLayoutParams;
     private RelativeLayout.LayoutParams relativeLayoutParams;
