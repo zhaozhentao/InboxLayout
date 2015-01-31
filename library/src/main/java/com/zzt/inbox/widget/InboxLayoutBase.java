@@ -39,6 +39,12 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
     private boolean shouldRollback;
     private Mode mMode = Mode.getDefault();
     private OnDragStateChangeListener onDragStateChangeListener;
+    private Runnable closeRunnable = new Runnable() {
+        @Override
+        public void run() {
+            closeWithAnim();
+        }
+    };
 
     private Mode mCurrentMode;
     private static enum Mode{
@@ -74,12 +80,10 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
         super(context, attrs, defStyle);
         ViewConfiguration config = ViewConfiguration.get(context);
         mTouchSlop = config.getScaledTouchSlop();
-
+        closeDistance = dp2px(60);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             this.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         }
-
-        closeDistance = dp2px(60);
 
         mHeightAnimator = ObjectAnimator.ofInt(this, aHeight, 0, 0);
         mScrollYAnimator = ObjectAnimator.ofInt(this, aScrollY, 0, 0);
@@ -229,11 +233,9 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
 
     protected abstract boolean isReadyForDragEnd();
 
-
     public final T getDragableView() {
         return mDragableView;
     }
-
 
     @Override
     public void addView(View child, int index, ViewGroup.LayoutParams params) {
@@ -351,12 +353,7 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
 
         if(oldScrollValue<-closeDistance||oldScrollValue>closeDistance){
             setVisibility(View.INVISIBLE);
-            postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    closeWithAnim();
-                }
-            }, 100);
+            postDelayed(closeRunnable, 100);
             shouldRollback = false;
         }else{
             shouldRollback = true;
@@ -398,6 +395,12 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
     private int beginBottomMargin;
     private int heightRange;
     private boolean IsStartAnim = false;
+    private Runnable showRunnable = new Runnable(){
+        @Override
+        public void run() {
+            setVisibility(View.VISIBLE);
+        }
+    };
 
     public void openWithAnim(View topView) {
         this.topView = topView;
@@ -434,12 +437,7 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
         mScrollView.drawTopShadow(beginScrollY, topOfTopView-beginScrollY, 0);
         mScrollView.drawBottomShadow(topView.getBottom(), beginScrollY+scrollViewHeight, 0);
         animatorSet.start();
-        postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                setVisibility(View.VISIBLE);
-            }
-        }, ANIMDURA);
+        postDelayed(showRunnable, ANIMDURA+10);
     }
 
     public void closeWithAnim(){

@@ -73,6 +73,7 @@ public class InboxBackgroundScrollView extends ScrollView{
         if(needToDrawSmallShadow) {
             mTopSmallShadowDrawable.setBounds(0, top + height - 50, getWidth(), top + height);
         }
+        invalidate();
     }
 
     public void drawBottomShadow(int top, int bottom, int alpha){
@@ -81,6 +82,7 @@ public class InboxBackgroundScrollView extends ScrollView{
         if(needToDrawSmallShadow) {
             mBottomSmallShadowDrawable.setBounds(0, top, getWidth(), top + 50);
         }
+        invalidate();
     }
 
 }
