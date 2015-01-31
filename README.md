@@ -25,18 +25,12 @@
             </LinearLayout>
         </com.zzt.inbox.widget.InboxScrollView>
         
-        <com.zzt.inbox.widget.InboxLayout
-            android:id="@+id/myframelayout"
+        <com.zzt.inbox.widget.InboxLayoutListView
+            android:id="@+id/inboxlayout"
             android:visibility="invisible"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <ListView  <!--目前InboxLayout只支持ListView作为子View, 后续版本会扩大适用范围-->
-                android:background="#ffffffff"
-                android:id="@+id/list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            </ListView>
-        </com.zzt.inbox.widget.InboxLayout>
+        </com.zzt.inbox.widget.InboxLayoutListView>
     </FrameLayout>
 
 ###step 2
