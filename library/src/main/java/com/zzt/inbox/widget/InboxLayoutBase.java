@@ -24,7 +24,7 @@ import com.zzt.inbox.interfaces.OnDragStateChangeListener;
 /**
  * Created by zzt on 2015/1/19.
  */
-public class InboxLayout extends FrameLayout {
+public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
 
     private View topView;
     public final static int LINEARPARAMS = 1;
@@ -32,7 +32,7 @@ public class InboxLayout extends FrameLayout {
     private int params = 0;
     private float mLastMotionX, mLastMotionY;
     private float mInitialMotionX, mInitialMotionY;
-    private ListView mRefreshableView;
+    private T mDragableView;
     private int mTouchSlop;
     private int ANIMDURA = 300;
     private int closeDistance;
@@ -64,15 +64,15 @@ public class InboxLayout extends FrameLayout {
         DragState(int value){}
     };
 
-    public InboxLayout(Context context) {
+    public InboxLayoutBase(Context context) {
         this(context, null);
     }
 
-    public InboxLayout(Context context, AttributeSet attrs) {
+    public InboxLayoutBase(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public InboxLayout(Context context, AttributeSet attrs, int defStyle) {
+    public InboxLayoutBase(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         ViewConfiguration config = ViewConfiguration.get(context);
         mTouchSlop = config.getScaledTouchSlop();
@@ -89,6 +89,9 @@ public class InboxLayout extends FrameLayout {
         mScrollYAnimator.setDuration(ANIMDURA);
         animatorSet.playTogether(mHeightAnimator, mScrollYAnimator);
         animatorSet.setInterpolator(mInterpolator);
+
+        mDragableView = createDragableView(context, attrs);
+        addDragableView(mDragableView);
     }
 
     @Override
@@ -121,7 +124,7 @@ public class InboxLayout extends FrameLayout {
                     absDiff = Math.abs(diff);
 
                     if (absDiff > mTouchSlop && (!mFilterTouchEvents || absDiff > Math.abs(oppositeDiff))) {
-                        if (diff >= 1f && isReadyForPullStart()) {
+                        if (diff >= 1f && isReadyForDragStart()) {
                             mLastMotionY = y;
                             mLastMotionX = x;
                             mIsBeingDragged = true;//这里返回了true 本次触摸就本类拦截了, 接下来的触摸事件由本类的onTouchEvent处理
@@ -129,7 +132,7 @@ public class InboxLayout extends FrameLayout {
                             if (mMode == Mode.BOTH) {
                                 mCurrentMode = Mode.PULL_FROM_START;
                             }
-                        }else if (diff <= -1f && isReadyForPullEnd()) {
+                        }else if (diff <= -1f && isReadyForDragEnd()) {
                             mLastMotionY = y;
                             mLastMotionX = x;
                             mIsBeingDragged = true;
@@ -145,56 +148,27 @@ public class InboxLayout extends FrameLayout {
     }
 
     private boolean isReadyForPull(){
-        if(mRefreshableView == null){
-            mRefreshableView = (ListView)getChildAt(0);
-        }
-
         switch(mMode){
             case PULL_FROM_START:
-                return isReadyForPullStart();
+                return isReadyForDragStart();
             case PULL_FROM_END:
-                return isReadyForPullEnd();
+                return isReadyForDragEnd();
             case BOTH:
-                return isReadyForPullEnd()||isReadyForPullStart();
+                return isReadyForDragEnd()||isReadyForDragStart();
             default:
                 return false;
         }
     }
 
-    private boolean isReadyForPullStart(){
-        final Adapter adapter = mRefreshableView.getAdapter();
-        if(null == adapter || adapter.isEmpty()){
-            return true;
-        }else{
-            if( mRefreshableView.getFirstVisiblePosition()<=1 ){
-                final View firstVisibleChild = mRefreshableView.getChildAt(0);
-                if(firstVisibleChild != null){
-                    return firstVisibleChild.getTop() >= mRefreshableView.getTop();
-                }
-            }
-        }
-        return false;
+    private void addDragableView(T DragableView) {
+        addView(DragableView,ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
     }
 
-    private boolean isReadyForPullEnd(){
-        final Adapter adapter = mRefreshableView.getAdapter();
+    protected abstract T createDragableView(Context context, AttributeSet attrs);
 
-        if (null == adapter || adapter.isEmpty()) {
-            return true;
-        }
-        else {
-            final int lastItemPosition = mRefreshableView.getCount() - 1;
-            final int lastVisiblePosition = mRefreshableView.getLastVisiblePosition();
-            if (lastVisiblePosition >= lastItemPosition - 1) {
-                final int childIndex = lastVisiblePosition - mRefreshableView.getFirstVisiblePosition();
-                final View lastVisibleChild = mRefreshableView.getChildAt(childIndex);
-                if (lastVisibleChild != null) {
-                    return lastVisibleChild.getBottom() <= mRefreshableView.getBottom();
-                }
-            }
-        }
-        return false;
-    }
+    protected abstract boolean isReadyForDragStart();
+
+    protected abstract boolean isReadyForDragEnd();
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -239,7 +213,6 @@ public class InboxLayout extends FrameLayout {
     static final float FRICTION = 2.0f;
     private void pullEvent() {
         final int newScrollValue;
-        final int itemDimension;
         final float initialMotionValue, lastMotionValue;
 
         initialMotionValue = mInitialMotionY;//vertical 就这样计算
@@ -288,7 +261,6 @@ public class InboxLayout extends FrameLayout {
                 mScrollView.drawTopShadow(mScrollView.getScrollY(), -realOffsetY, 60);
                 break;
         }
-        mScrollView.invalidate();
 
         return realOffsetY;
     }
@@ -337,7 +309,7 @@ public class InboxLayout extends FrameLayout {
             }
             // keep going...
             if (mContinueRunning && mScrollToY != mCurrentY) {
-                InboxLayout.this.postDelayed(this, 16);
+                InboxLayoutBase.this.postDelayed(this, 16);
             } else {
                 //Finish
             }
@@ -406,7 +378,6 @@ public class InboxLayout extends FrameLayout {
     private boolean IsStartAnim = false;
 
     public void openWithAnim(View topView) {
-        IsStartAnim = true;
         this.topView = topView;
 
         layoutParams = topView.getLayoutParams();
@@ -423,19 +394,23 @@ public class InboxLayout extends FrameLayout {
             return ;
         }
 
+        IsStartAnim = true;
+        mScrollView.needToDrawShadow = true;
         beginBottomMargin = heightRange;
         topView.setAlpha(0);
+
         if(animatorSet.isRunning()){
             animatorSet.cancel();
         }
 
+        int scrollViewHeight = mScrollView.getHeight();
+        int topOfTopView = topView.getTop();
         beginScrollY = mScrollView.getScrollY();
-        heightRange = mScrollView.getHeight() - topView.getHeight();
+        heightRange = scrollViewHeight - topView.getHeight();
         mHeightAnimator.setIntValues(beginBottomMargin, heightRange);
-        mScrollYAnimator.setIntValues(beginScrollY, topView.getTop());
-        mScrollView.needToDrawShadow = true;
-        mScrollView.drawTopShadow(beginScrollY, topView.getTop()-beginScrollY, 0);
-        mScrollView.drawBottomShadow(topView.getBottom(), beginScrollY+mScrollView.getHeight(), 0);
+        mScrollYAnimator.setIntValues(beginScrollY, topOfTopView);
+        mScrollView.drawTopShadow(beginScrollY, topOfTopView-beginScrollY, 0);
+        mScrollView.drawBottomShadow(topView.getBottom(), beginScrollY+scrollViewHeight, 0);
         animatorSet.start();
         postDelayed(new Runnable() {
             @Override
@@ -481,34 +456,33 @@ public class InboxLayout extends FrameLayout {
         mScrollView.drawBottomShadow(topView.getBottom()+mHeight, mScrollView.getScrollY()+mScrollView.getHeight(), alpha);
     }
 
-    Property<InboxLayout, Integer> aHeight = new Property<InboxLayout, Integer>(Integer.class, "mHeight") {
+    Property<InboxLayoutBase, Integer> aHeight = new Property<InboxLayoutBase, Integer>(Integer.class, "mHeight") {
         @Override
-        public Integer get(InboxLayout object) {
+        public Integer get(InboxLayoutBase object) {
             return object.mHeight;
         }
         @Override
-        public void set(InboxLayout object, Integer value) {
+        public void set(InboxLayoutBase object, Integer value) {
             object.mHeight = value;
             heightChangeAnim();
 
-            if(IsStartAnim && value == heightRange){
+            if(value == heightRange && IsStartAnim){
                 //Open Anim Stop
                 mScrollView.needToDrawSmallShadow = true;
-            }else if(!IsStartAnim && value == beginBottomMargin){
+            }else if(value == beginBottomMargin && !IsStartAnim){
                 //Close Anim Stop
                 topView.setAlpha(1);
             }
-
         }
     };
 
-    Property<InboxLayout, Integer> aScrollY = new Property<InboxLayout, Integer>(Integer.class, "iScrollY"){
+    Property<InboxLayoutBase, Integer> aScrollY = new Property<InboxLayoutBase, Integer>(Integer.class, "iScrollY"){
         @Override
-        public Integer get(InboxLayout object) {
+        public Integer get(InboxLayoutBase object) {
             return object.iScrollY;
         }
         @Override
-        public void set(InboxLayout object, Integer value) {
+        public void set(InboxLayoutBase object, Integer value) {
             object.iScrollY = value;
             scrollYChangeAnim();
         }

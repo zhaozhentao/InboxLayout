@@ -62,18 +62,12 @@
                 </RelativeLayout>
         </com.zzt.inbox.widget.InboxScrollView>
 
-        <com.zzt.inbox.widget.InboxLayout
+        <com.zzt.inbox.widget.InboxLayoutListView
             android:id="@+id/inboxlayout"
             android:visibility="invisible"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <ListView
-                android:background="#ffffffff"
-                android:id="@+id/list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            </ListView>
-        </com.zzt.inbox.widget.InboxLayout>
+        </com.zzt.inbox.widget.InboxLayoutListView>
 
     </FrameLayout>
 </LinearLayout>
