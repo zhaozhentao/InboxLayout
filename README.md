@@ -1,5 +1,6 @@
 # InboxLayout
-模拟Google Inbox邮箱的上下拉返回效果
+模仿Google Inbox邮箱的上下拉返回效果
+让你的app加入真正方便的手势操作
 
 # ScreenShot
 ![image](https://raw.githubusercontent.com/zhaozhentao/InboxLayout/master/screenshot/pic.gif)
