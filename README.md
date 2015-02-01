@@ -1,5 +1,6 @@
 # InboxLayout
 模仿Google Inbox邮箱的上下拉返回效果
+
 让你的app加入真正方便的手势操作
 
 # ScreenShot
@@ -52,4 +53,6 @@
     });
 
 # Last
-目前InboxLayout仍处于初级阶段,使用上有较多的限制,后续版本将不断丰富,扩大适用范围
+InboxLayout目前支持底部为scrollview 顶部为listview和scrollview的情况,适用于大部分场景
+
+目前正在做底部为listview的情况
