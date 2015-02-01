@@ -47,10 +47,6 @@ public class InboxBackgroundScrollView extends ScrollView{
     }
 
     protected void drawOverlay(Canvas canvas){
-        final int width = getWidth();
-        final int height= getHeight();
-        final int offsetPixels= 200;//(int)this.realOffsetY;
-        final float openRatio = Math.abs(100)/200;
         if(needToDrawShadow) {
             mTopShadow.draw(canvas);
             mBottomShadow.draw(canvas);
@@ -60,12 +56,6 @@ public class InboxBackgroundScrollView extends ScrollView{
             mBottomSmallShadowDrawable.draw(canvas);
         }
     }
-
-   public void drawShadow(int topTop, int topHeight, int bottomTop, int bottomHeight){
-       //drawTopShadow(topTop, topHeight);
-       //drawBottomShadow(bottomTop, bottomHeight);
-       invalidate();
-   }
 
     public void drawTopShadow(int top, int height, int alpha){
         mTopShadow.setBounds(0, top, getWidth(), top+height);

@@ -3,6 +3,8 @@ package com.zzt.inbox.widget;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Path;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -94,6 +96,7 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
 
         mDragableView = createDragableView(context, attrs);
         addDragableView(mDragableView);
+
     }
 
     @Override
@@ -150,7 +153,6 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
     }
 
     private boolean isReadyForPull(){
-        System.out.println("is ready for pull");
         switch(mMode){
             case PULL_FROM_START:
                 return isReadyForDragStart();
@@ -249,7 +251,7 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
         if (refreshableView instanceof ViewGroup) {
             ((ViewGroup) refreshableView).addView(child, index, params);
         } else {
-            throw new UnsupportedOperationException("Refreshable View is not a ViewGroup so can't addView");
+            throw new UnsupportedOperationException("Dragable View is not a ViewGroup so can't addView");
         }
     }
 
@@ -391,7 +393,7 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
     private ObjectAnimator mHeightAnimator;
     private ObjectAnimator mScrollYAnimator;
     private Interpolator mInterpolator = new DecelerateInterpolator();
-    private int beginScrollY;
+    private int beginScrollY, endScrollY;
     private int beginBottomMargin;
     private int heightRange;
     private boolean IsStartAnim = false;
@@ -429,12 +431,12 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
         }
 
         int scrollViewHeight = mScrollView.getHeight();
-        int topOfTopView = topView.getTop();
+        endScrollY = topView.getTop();
         beginScrollY = mScrollView.getScrollY();
         heightRange = scrollViewHeight - topView.getHeight();
         mHeightAnimator.setIntValues(beginBottomMargin, heightRange);
-        mScrollYAnimator.setIntValues(beginScrollY, topOfTopView);
-        mScrollView.drawTopShadow(beginScrollY, topOfTopView-beginScrollY, 0);
+        mScrollYAnimator.setIntValues(beginScrollY, endScrollY);
+        mScrollView.drawTopShadow(beginScrollY, endScrollY-beginScrollY, 0);
         mScrollView.drawBottomShadow(topView.getBottom(), beginScrollY+scrollViewHeight, 0);
         animatorSet.start();
         postDelayed(showRunnable, ANIMDURA+10);
@@ -485,7 +487,6 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
         public void set(InboxLayoutBase object, Integer value) {
             object.mHeight = value;
             heightChangeAnim();
-
             if(value == heightRange && IsStartAnim){
                 //Open Anim Stop
                 mScrollView.needToDrawSmallShadow = true;
