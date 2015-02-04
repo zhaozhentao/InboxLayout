@@ -3,6 +3,8 @@
 
 让你的app加入真正方便的手势操作
 
+喜欢的给个star支持下呗:-)
+
 # ScreenShot
 ![image](https://raw.githubusercontent.com/zhaozhentao/InboxLayout/master/screenshot/pic.gif)
 
