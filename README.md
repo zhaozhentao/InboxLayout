@@ -57,4 +57,3 @@
 # Last
 InboxLayout目前支持底部为scrollview 顶部为listview和scrollview的情况,适用于大部分场景
 
-目前正在做底部为listview的情况
