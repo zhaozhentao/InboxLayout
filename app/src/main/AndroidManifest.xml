@@ -7,25 +7,13 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        <activity
-            android:name=".ListViewActivity"
-            android:label="@string/app_name" >
-        </activity>
-
-        <activity android:name=".ScrollViewActivity" android:label="@string/app_name">
-        </activity>
-
-        <activity android:name=".TestListViewActivity" android:label="@string/app_name">
-
-        </activity>
-
-        <activity android:name=".MainActivity" android:label="@string/app_name">
+        <activity android:name=".activity.ListViewActivity" android:label="@string/app_name" />
+        <activity android:name=".activity.ScrollViewActivity" android:label="@string/app_name"/>
+        <activity android:name=".activity.MainActivity" android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
-
 </manifest>

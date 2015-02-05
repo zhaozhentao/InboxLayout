@@ -1,33 +1,38 @@
-package com.zzt.inboxlayout;
+package com.zzt.inboxlayout.activity;
 
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 
 import com.zzt.inbox.interfaces.OnDragStateChangeListener;
 import com.zzt.inbox.widget.InboxLayoutBase;
-import com.zzt.inbox.widget.InboxLayoutScrollView;
+import com.zzt.inbox.widget.InboxLayoutListView;
 import com.zzt.inbox.widget.InboxBackgroundScrollView;
+import com.zzt.inboxlayout.R;
+
 
 /**
- * Created by zzt on 2015/1/31.
+ * Created by zzt on 2015/1/19.
  */
-public class ScrollViewActivity extends ActionBarActivity {
-    InboxLayoutScrollView inboxLayoutScrollView;
+public class ListViewActivity extends ActionBarActivity {
+    InboxLayoutListView inboxLayoutListView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.scrollview_activity);
+        setContentView(R.layout.main_activity);
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0xdd000000));
 
         final InboxBackgroundScrollView inboxBackgroundScrollView = (InboxBackgroundScrollView)findViewById(R.id.scroll);
-        inboxLayoutScrollView = (InboxLayoutScrollView)findViewById(R.id.inboxlayout);
-        inboxLayoutScrollView.seBackgroundScrollView(inboxBackgroundScrollView);//绑定scrollview
-        inboxLayoutScrollView.setCloseDistance(50);
-        inboxLayoutScrollView.setOnDragStateChangeListener(new OnDragStateChangeListener() {
+        inboxLayoutListView = (InboxLayoutListView)findViewById(R.id.inboxlayout);
+        inboxLayoutListView.seBackgroundScrollView(inboxBackgroundScrollView);//绑定scrollview
+        inboxLayoutListView.setCloseDistance(50);
+        inboxLayoutListView.setOnDragStateChangeListener(new OnDragStateChangeListener() {
             @Override
             public void dragStateChange(InboxLayoutBase.DragState state) {
                 switch (state) {
@@ -42,6 +47,29 @@ public class ScrollViewActivity extends ActionBarActivity {
                 }
             }
         });
+        inboxLayoutListView.setAdapter(new BaseAdapter() {
+            @Override
+            public int getCount() {
+                return 20;
+            }
+
+            @Override
+            public Object getItem(int position) {
+                return null;
+            }
+
+            @Override
+            public long getItemId(int position) {
+                return position;
+            }
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                LayoutInflater inflater = ListViewActivity.this.getLayoutInflater();
+                View view = inflater.inflate(R.layout.item, null);
+                return view;
+            }
+        });
 
         init();
     }
@@ -52,7 +80,7 @@ public class ScrollViewActivity extends ActionBarActivity {
         dingdan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                inboxLayoutScrollView.openWithAnim(dingdan);
+                inboxLayoutListView.openWithAnim(dingdan);
             }
         });
 
@@ -60,7 +88,7 @@ public class ScrollViewActivity extends ActionBarActivity {
         yuding.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                inboxLayoutScrollView.openWithAnim(yuding);
+                inboxLayoutListView.openWithAnim(yuding);
             }
         });
 
@@ -68,7 +96,7 @@ public class ScrollViewActivity extends ActionBarActivity {
         tuijian.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                inboxLayoutScrollView.openWithAnim(tuijian);
+                inboxLayoutListView.openWithAnim(tuijian);
             }
         });
 
@@ -76,7 +104,7 @@ public class ScrollViewActivity extends ActionBarActivity {
         member.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                inboxLayoutScrollView.openWithAnim(member);
+                inboxLayoutListView.openWithAnim(member);
             }
         });
 
@@ -84,7 +112,7 @@ public class ScrollViewActivity extends ActionBarActivity {
         choujiang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                inboxLayoutScrollView.openWithAnim(choujiang);
+                inboxLayoutListView.openWithAnim(choujiang);
             }
         });
 
@@ -92,9 +120,10 @@ public class ScrollViewActivity extends ActionBarActivity {
         diyongquan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                inboxLayoutScrollView.openWithAnim(diyongquan);
+                inboxLayoutListView.openWithAnim(diyongquan);
             }
         });
     }
+
 
 }

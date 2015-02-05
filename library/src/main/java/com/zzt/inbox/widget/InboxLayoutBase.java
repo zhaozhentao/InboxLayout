@@ -443,6 +443,7 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
     }
 
     public void closeWithAnim(){
+        topView.setAlpha(1);
         mScrollView.needToDrawSmallShadow = false;
         IsStartAnim = false;
         dragState = DragState.CANNOTCLOSE;
@@ -492,7 +493,6 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
                 mScrollView.needToDrawSmallShadow = true;
             }else if(value == beginBottomMargin && !IsStartAnim){
                 //Close Anim Stop
-                topView.setAlpha(1);
             }
         }
     };
