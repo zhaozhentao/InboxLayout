@@ -30,7 +30,7 @@ public class ListViewActivity extends ActionBarActivity {
 
         final InboxBackgroundScrollView inboxBackgroundScrollView = (InboxBackgroundScrollView)findViewById(R.id.scroll);
         inboxLayoutListView = (InboxLayoutListView)findViewById(R.id.inboxlayout);
-        inboxLayoutListView.seBackgroundScrollView(inboxBackgroundScrollView);//绑定scrollview
+        inboxLayoutListView.setBackgroundScrollView(inboxBackgroundScrollView);//绑定scrollview
         inboxLayoutListView.setCloseDistance(50);
         inboxLayoutListView.setOnDragStateChangeListener(new OnDragStateChangeListener() {
             @Override

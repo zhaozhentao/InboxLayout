@@ -371,7 +371,7 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
         }
     }
 
-    public void seBackgroundScrollView(InboxBackgroundScrollView scrollView){
+    public void setBackgroundScrollView(InboxBackgroundScrollView scrollView){
         mScrollView = scrollView;
     }
 
@@ -406,6 +406,10 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
 
     public void openWithAnim(View topView) {
         this.topView = topView;
+        /*
+         *  eat the touch event when anim start
+         */
+        mScrollView.setTouchable(false);
 
         layoutParams = topView.getLayoutParams();
         if(layoutParams instanceof LinearLayout.LayoutParams){
@@ -439,7 +443,7 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
         mScrollView.drawTopShadow(beginScrollY, endScrollY-beginScrollY, 0);
         mScrollView.drawBottomShadow(topView.getBottom(), beginScrollY+scrollViewHeight, 0);
         animatorSet.start();
-        postDelayed(showRunnable, ANIMDURA+10);
+        postDelayed(showRunnable, ANIMDURA+10);//将顶层的view显示出来
     }
 
     public void closeWithAnim(){
@@ -493,6 +497,10 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
                 mScrollView.needToDrawSmallShadow = true;
             }else if(value == beginBottomMargin && !IsStartAnim){
                 //Close Anim Stop
+                /*
+                 * enable touch event when top view close
+                 */
+                mScrollView.setTouchable(true);
             }
         }
     };

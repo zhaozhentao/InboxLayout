@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.widget.ScrollView;
 
 /**
@@ -13,6 +14,7 @@ import android.widget.ScrollView;
  */
 public class InboxBackgroundScrollView extends ScrollView{
 
+    private boolean mTouchable = true;
     public boolean needToDrawSmallShadow = false;
     public boolean needToDrawShadow = false;
     protected static final int MAX_MENU_OVERLAY_ALPHA = 185;
@@ -75,4 +77,18 @@ public class InboxBackgroundScrollView extends ScrollView{
         invalidate();
     }
 
+    public void setTouchable(boolean touchable){
+        mTouchable = touchable;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        if(!mTouchable) {
+            /*
+            * just eat the touch event
+            * */
+            return false;
+        }
+        return super.onTouchEvent(ev);
+    }
 }
