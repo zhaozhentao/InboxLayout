@@ -3,6 +3,8 @@
 
 让你的app加入真正方便的手势操作
 
+使用InboxLayout前最好来这里看看有没有更新~~~
+
 喜欢的给个star支持下呗:-)
 
 # ScreenShot
