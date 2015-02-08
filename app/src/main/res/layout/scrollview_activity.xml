@@ -53,13 +53,10 @@
                     <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginTop="@dimen/keyline_1" android:layout_marginBottom="@dimen/keyline_1" android:layout_marginLeft="@dimen/keyline_1" android:text="我的抵用券" android:layout_gravity="center_vertical"  android:drawableLeft="@drawable/ic_order_voucher_enabled" android:drawablePadding="@dimen/keyline_1"/>
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:drawableRight="@drawable/ic_global_arrow_right_2px" android:drawablePadding="@dimen/keyline_1" android:layout_gravity="center_vertical" android:layout_marginRight="@dimen/keyline_1"/>
                 </LinearLayout>
+
+                <!--this is very important when scrollview's height is greater than the hegiht of scrollview's childview-->
                 <View android:tag="empty_view" android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
-<!--                <ImageView
-                    android:id="@+id/text" android:scaleType="centerCrop" android:layout_below="@id/diyongquan"
-                    android:background="@drawable/pic2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />-->
             </LinearLayout>
         </com.zzt.inbox.widget.InboxBackgroundScrollView>
 

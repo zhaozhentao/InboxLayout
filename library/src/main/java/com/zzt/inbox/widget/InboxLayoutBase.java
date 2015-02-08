@@ -100,6 +100,8 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
         super.onLayout(changed, left, top, right, bottom);
         if(mScrollView.getHeight()!=0 && mScrollView.getHeight()>mScrollView.getChildAt(0).getHeight()){
             View view = mScrollView.getChildAt(0).findViewWithTag("empty_view");
+            if(view == null)
+                return ;
             ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
             layoutParams.height = mScrollView.getHeight() - mScrollView.getChildAt(0).getHeight();
             view.setLayoutParams(layoutParams);
