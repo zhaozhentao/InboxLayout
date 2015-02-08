@@ -1,6 +1,7 @@
 package com.zzt.inbox.widget;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -22,6 +23,7 @@ public class InboxBackgroundScrollView extends ScrollView{
     private Drawable mBottomSmallShadowDrawable;
     private Drawable mTopShadow = new ColorDrawable(0xff000000);
     private Drawable mBottomShadow = new ColorDrawable(0xff000000);
+    private int smallShadowHeight;
 
     public InboxBackgroundScrollView(Context context) {
         this(context, null);
@@ -34,18 +36,16 @@ public class InboxBackgroundScrollView extends ScrollView{
     public InboxBackgroundScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mTopSmallShadowDrawable = new GradientDrawable(
-                GradientDrawable.Orientation.BOTTOM_TOP, new int[]{0x66303030, 0});
+                GradientDrawable.Orientation.BOTTOM_TOP, new int[]{0x77101010, 0});
         mBottomSmallShadowDrawable = new GradientDrawable(
-                GradientDrawable.Orientation.TOP_BOTTOM, new int[]{0x66303030, 0});
+                GradientDrawable.Orientation.TOP_BOTTOM, new int[]{0x77101010, 0});
+        smallShadowHeight = dpToPx(10);
     }
 
     @Override
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
-        final int offsetPixels = (int)200;
-        if(offsetPixels!=0){
-            drawOverlay(canvas);
-        }
+        drawOverlay(canvas);
     }
 
     protected void drawOverlay(Canvas canvas){
@@ -63,18 +63,18 @@ public class InboxBackgroundScrollView extends ScrollView{
         mTopShadow.setBounds(0, top, getWidth(), top+height);
         mTopShadow.setAlpha(alpha);
         if(needToDrawSmallShadow) {
-            mTopSmallShadowDrawable.setBounds(0, top + height - 50, getWidth(), top + height);
+            mTopSmallShadowDrawable.setBounds(0, top + height - smallShadowHeight, getWidth(), top + height);
         }
-        invalidate();
+        //invalidate();
     }
 
     public void drawBottomShadow(int top, int bottom, int alpha){
         mBottomShadow.setBounds(0, top, getWidth(), bottom);
         mBottomShadow.setAlpha(alpha);
         if(needToDrawSmallShadow) {
-            mBottomSmallShadowDrawable.setBounds(0, top, getWidth(), top + 50);
+            mBottomSmallShadowDrawable.setBounds(0, top, getWidth(), top + smallShadowHeight);
         }
-        invalidate();
+        //invalidate();
     }
 
     public void setTouchable(boolean touchable){
@@ -87,8 +87,17 @@ public class InboxBackgroundScrollView extends ScrollView{
             /*
             * just eat the touch event
             * */
-            return false;
+            return true;
         }
         return super.onTouchEvent(ev);
+    }
+
+    public int getScrollRange(){
+        return computeVerticalScrollRange();
+    }
+
+    public int dpToPx(int dp){
+        //不需要context的
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
     }
 }

@@ -3,8 +3,6 @@ package com.zzt.inbox.widget;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Path;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -18,7 +16,6 @@ import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-
 import com.zzt.inbox.interfaces.OnDragStateChangeListener;
 
 /**
@@ -86,7 +83,6 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             this.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         }
-
         mHeightAnimator = ObjectAnimator.ofInt(this, aHeight, 0, 0);
         mScrollYAnimator = ObjectAnimator.ofInt(this, aScrollY, 0, 0);
         mHeightAnimator.setDuration(ANIMDURA);
@@ -97,6 +93,18 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
         mDragableView = createDragableView(context, attrs);
         addDragableView(mDragableView);
 
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        if(mScrollView.getHeight()!=0 && mScrollView.getHeight()>mScrollView.getChildAt(0).getHeight()){
+            View view = mScrollView.getChildAt(0).findViewWithTag("empty_view");
+            ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+            layoutParams.height = mScrollView.getHeight() - mScrollView.getChildAt(0).getHeight();
+            view.setLayoutParams(layoutParams);
+            view.requestLayout();
+        }
     }
 
     @Override
@@ -287,7 +295,7 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
                 mScrollView.drawTopShadow(mScrollView.getScrollY(), -realOffsetY, 60);
                 break;
         }
-
+        mScrollView.invalidate();
         return realOffsetY;
     }
 
@@ -421,7 +429,7 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
             relativeLayoutParams = (RelativeLayout.LayoutParams)layoutParams;
             heightRange = relativeLayoutParams.bottomMargin;
         }else{
-            Log.e("error", "topView's parent should be linearlayout or relativelayout");
+            Log.e("error", "topView's parent should be linearlayout");
             return ;
         }
 
@@ -440,8 +448,8 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
         heightRange = scrollViewHeight - topView.getHeight();
         mHeightAnimator.setIntValues(beginBottomMargin, heightRange);
         mScrollYAnimator.setIntValues(beginScrollY, endScrollY);
-        mScrollView.drawTopShadow(beginScrollY, endScrollY-beginScrollY, 0);
-        mScrollView.drawBottomShadow(topView.getBottom(), beginScrollY+scrollViewHeight, 0);
+        mScrollView.drawTopShadow(beginScrollY, endScrollY - beginScrollY, 0);
+        mScrollView.drawBottomShadow(topView.getBottom(), beginScrollY + scrollViewHeight, 0);
         animatorSet.start();
         postDelayed(showRunnable, ANIMDURA+10);//将顶层的view显示出来
     }
@@ -480,7 +488,8 @@ public abstract class  InboxLayoutBase <T extends View> extends FrameLayout {
         alpha = 60 * mHeight/heightRange;
         mScrollView.scrollTo(0, iScrollY);
         mScrollView.drawTopShadow(iScrollY, topView.getTop()-iScrollY, alpha);
-        mScrollView.drawBottomShadow(topView.getBottom()+mHeight, mScrollView.getScrollY()+mScrollView.getHeight(), alpha);
+        mScrollView.drawBottomShadow(topView.getBottom() + mHeight, mScrollView.getScrollY() + mScrollView.getHeight(), alpha);
+        mScrollView.invalidate();
     }
 
     Property<InboxLayoutBase, Integer> aHeight = new Property<InboxLayoutBase, Integer>(Integer.class, "mHeight") {

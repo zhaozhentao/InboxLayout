@@ -120,7 +120,7 @@ public class ListViewActivity extends ActionBarActivity {
         diyongquan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                inboxLayoutListView.openWithAnim(diyongquan);
+                inboxLayoutListView.openWithAnim(diyongquan);//bottom item set true
             }
         });
     }

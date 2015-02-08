@@ -93,7 +93,7 @@ public class ScrollViewActivity extends ActionBarActivity {
         diyongquan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                inboxLayoutScrollView.openWithAnim(diyongquan);
+                inboxLayoutScrollView.openWithAnim(diyongquan);//bottomItem set true
             }
         });
     }
