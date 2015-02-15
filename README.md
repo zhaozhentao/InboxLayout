@@ -10,6 +10,8 @@
 # ScreenShot
 ![image](https://raw.githubusercontent.com/zhaozhentao/InboxLayout/master/screenshot/pic.gif)
 
+![image](https://github.com/zhaozhentao/InboxLayout/blob/master/screenshot/pic1.gif)
+
 # Usage
 ###step 1
 实现类似的布局, 具体可参考demo
