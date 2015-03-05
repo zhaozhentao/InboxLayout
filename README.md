@@ -5,7 +5,6 @@
 
 使用InboxLayout前最好来这里看看有没有更新~~~
 
-喜欢的给个star支持下呗:-)
 
 # ScreenShot
 ![image](https://raw.githubusercontent.com/zhaozhentao/InboxLayout/master/screenshot/pic.gif)
